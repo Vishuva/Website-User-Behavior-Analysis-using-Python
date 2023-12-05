@@ -1,0 +1,41 @@
+import datetime
+import json
+
+class UserBehaviorAnalyzer:
+    def __init__(self):
+        self.user_data = {}
+
+    def log_user_activity(self, user_id, action):
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if user_id not in self.user_data:
+            self.user_data[user_id] = {'actions': []}
+
+        self.user_data[user_id]['actions'].append({'time': current_time, 'action': action})
+
+    def save_user_data_to_file(self, filename='user_data.json'):
+        with open(filename, 'w') as file:
+            json.dump(self.user_data, file, indent=2)
+
+    def analyze_user_behavior(self, user_id):
+        if user_id in self.user_data:
+            print(f"User {user_id} Activity:")
+            for activity in self.user_data[user_id]['actions']:
+                print(f"{activity['time']} - {activity['action']}")
+        else:
+            print(f"User {user_id} not found in the recorded data.")
+
+# Example Usage:
+analyzer = UserBehaviorAnalyzer()
+
+# Simulate user activities
+analyzer.log_user_activity(user_id='user1', action='visited_homepage')
+analyzer.log_user_activity(user_id='user2', action='clicked_button')
+analyzer.log_user_activity(user_id='user1', action='viewed_product_page')
+analyzer.log_user_activity(user_id='user2', action='submitted_form')
+
+# Save user data to a file
+analyzer.save_user_data_to_file()
+
+# Analyze user behavior
+analyzer.analyze_user_behavior(user_id='user1')
+analyzer.analyze_user_behavior(user_id='user2')
